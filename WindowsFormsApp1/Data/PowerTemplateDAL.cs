@@ -31,7 +31,8 @@ namespace Data
                     PowerTemplateDTO powerTemplateDTO = new PowerTemplateDTO();
 
                     powerTemplateDTO.Id = reader.GetInt32(0);
-                    powerTemplateDTO.Template = (byte[])reader.GetValue(14);
+                    powerTemplateDTO.Template = (byte[])reader.GetValue(1);
+                    TemplateDTOs.Add(powerTemplateDTO);
                 }
                 connection.Close();
             }

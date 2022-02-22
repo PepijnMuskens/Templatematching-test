@@ -8,9 +8,9 @@ namespace Loadout_tracker
 {
     public class Power
     {
-        int Id;
-        string Name;
-        byte[] image;
+        public int Id;
+        public string Name;
+        public byte[] image;
 
 
     }

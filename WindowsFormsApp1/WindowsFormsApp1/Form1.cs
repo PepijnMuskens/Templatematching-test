@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Loadout_tracker;
 
 namespace WindowsFormsApp1
 {
@@ -18,11 +18,16 @@ namespace WindowsFormsApp1
     {
         private Point[] sperks;
         private Point Statuslocation;
+        private double Score;
+
+        private Searcher Searcher;
         public Form1()
         {
             InitializeComponent();
             Statuslocation = new Point(807, 246);
             sperks = new Point[2] {new Point(175,310), new Point(400,700) };
+
+            Searcher = new Searcher();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -48,13 +53,10 @@ namespace WindowsFormsApp1
         private void button3_Click(object sender, EventArgs e)
         {
             Image<Bgr, byte> Image1 = new Image<Bgr, byte>(new Bitmap(pictureBox1.Image));
-            Image<Bgr, byte> Image2 = new Image<Bgr, byte>(new Bitmap(Properties.Resources.status)); 
-            Point temp = findImage(Image1, Image2);
-            Point offsett = new Point(Statuslocation.X - temp.X, Statuslocation.Y - temp.Y);
+            Image<Bgr, byte> Image2 = new Image<Bgr, byte>(new Bitmap(pictureBox2.Image));
+            Point point = findImage(Image1, Image2);
+            label2.Text = Score.ToString() + " " + point.X.ToString() + " " + point.Y.ToString();
 
-            Image2 = new Image<Bgr, byte>(new Bitmap(pictureBox2.Image));
-
-            findImage(Image1, Image2, new Point(sperks[0].X - offsett.X, sperks[0].Y - offsett.Y), new Point(sperks[1].X - offsett.X, sperks[1].Y - offsett.Y));
         }
 
         private Point findImage(Image<Bgr,byte> image1, Image<Bgr, byte> image2)
@@ -67,9 +69,16 @@ namespace WindowsFormsApp1
             {
                 for (int x = 0; x < Matches.Data.GetLength(1); x++)
                 {
-                    if (Matches.Data[y, x, 0] >= Threshold) 
+                    double temp = Matches.Data[y, x, 0];
+                    if (temp >= Threshold) 
                     {
-                        
+                        Score = temp;
+                        Bitmap Bitmap = new Bitmap(pictureBox1.Image);
+                        using (Graphics g = Graphics.FromImage(Bitmap))
+                        {
+                            g.DrawRectangle(new Pen(Color.Yellow, 1), new Rectangle(x, y, pictureBox2.Image.Width, pictureBox2.Image.Height));
+                        }
+                        pictureBox1.Image = Bitmap;
                         return new Point(x, y);
                     }
                 }
@@ -112,5 +121,11 @@ namespace WindowsFormsApp1
             label1.Text = ((double)trackBar1.Value / 100).ToString();
         }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Image<Bgr, byte> Image1 = new Image<Bgr, byte>(new Bitmap(pictureBox1.Image));
+
+            Game game = Searcher.GetLoadouts(Image1);
+        }
     }
 }

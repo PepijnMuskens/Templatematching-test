@@ -9,18 +9,28 @@ using System.Threading.Tasks;
 using Interface;
 using Data;
 using System.Drawing;
+using Loadout_tracker.Properties;
+using System.ComponentModel;
 
 namespace Loadout_tracker
 {
+    
     public class Searcher
     {
-        public Game Game { get; private set; }
         private List<PowerTemplate> PowerTemplates;
         private PowerTemplateDAL PowerTemplateDAL;
+
+        private double Score;
+
+        private Point Statuslocation;
+        private Area Power;
         public Searcher()
         {
             PowerTemplateDAL = new PowerTemplateDAL();
             PowerTemplates = new List<PowerTemplate>();
+
+            Statuslocation = new Point(637, 13);
+            Power =  new Area(new Point(409, 537), new Point(448, 576));
             
             foreach (PowerTemplateDTO powerTemplateDTO in PowerTemplateDAL.GetAllPowerTemplates())
             {
@@ -28,41 +38,59 @@ namespace Loadout_tracker
             }
         }
 
-        public Game GetLoadouts(byte[] image)
+        public Game GetLoadouts(Image<Bgr, byte> image)
         {
-            
-            foreach(PowerTemplate powerTemplate in PowerTemplates)
+            Game game = new Game();
+            //loop true all the scales
+            for (double i = 0.7; i < 1.01; i = i + 0.05)
             {
-
+                break;
             }
-            return Game;
-        }
-
-        private Point findImage(Image<Bgr, byte> image1, Image<Bgr, byte> image2, Point point1, Point point2)
-        {
-            double Threshold = 0.70; //set it to a decimal value between 0 and 1.00, 1.00 meaning that the images must be identical
-
-            Image<Gray, float> Matches = image1.MatchTemplate(image2, TemplateMatchingType.CcoeffNormed);
-
-            for (int y = point1.Y; y < point2.Y; y++)
+            Point offset = getoffset(image, new Image<Bgr, byte>(Resources.scale_template));
+            if (Score > 0.8)
             {
-                for (int x = point1.X; x < point2.X; x++)
+                foreach (PowerTemplate powerTemplate in PowerTemplates)
                 {
-                    if (Matches.Data[y, x, 0] >= Threshold)
-                    {
-                        
-                        return new Point(x, y);
+                    game.KLoadout = new KLoadout();
+                    Area powerArea = Power.offset(offset.X,offset.Y);
+                    TypeConverter tc = TypeDescriptor.GetConverter(typeof(Bitmap));
+                    Bitmap template = (Bitmap)tc.ConvertFrom(powerTemplate.Template);
+                    if (findImage(image, new Image<Bgr, byte>(template),powerArea) > 0.7){
+                        game.KLoadout.Power = powerTemplate.Id;
                     }
                 }
             }
-            return new Point(0, 0);
+            return game;
+        }
+
+        private double findImage(Image<Bgr, byte> image1, Image<Bgr, byte> image2, Area area)
+        {
+            double score = 0;
+            double TopThreshold = 0.85; //set it to a decimal value between 0 and 1.00, 1.00 meaning that the images must be identical
+            double bottemThreshold = 0.7;
+            Image<Gray, float> Matches = image1.MatchTemplate(image2, TemplateMatchingType.CcoeffNormed);
+
+            for (int y = area.Spoint.Y; y < area.Epoint.Y; y++)
+            {
+                for (int x = area.Spoint.X; x < area.Epoint.X; x++)
+                {
+                    double temp = Matches.Data[y, x, 0];
+                    if(temp > TopThreshold) return temp;
+                    if (temp >= bottemThreshold)
+                    {
+                        if(temp > Score) score = temp;
+                    }
+                }
+            }
+            return score;
         }
 
 
 
         private Point getoffset(Image<Bgr, byte> Image1, Image<Bgr, byte> Image2)
         {
-            double Threshold = 0.70;
+            Score = 0;
+            double Threshold = 0.80;
 
             Image<Gray, float> Matches = Image1.MatchTemplate(Image2, TemplateMatchingType.CcoeffNormed);
 
@@ -70,14 +98,33 @@ namespace Loadout_tracker
             {
                 for (int x = 0; x < Matches.Data.GetLength(1); x++)
                 {
-                    if (Matches.Data[y, x, 0] >= Threshold)
+                    double temp = Matches.Data[y, x, 0];
+                    if (temp >= Threshold)
                     {
-
-                        return new Point(x, y);
+                        Score = temp;
+                        return new Point(Statuslocation.X - x, Statuslocation.Y - y);
                     }
                 }
             }
             return new Point(0, 0);
+        }
+    }
+
+    class Area
+    {
+        public Point Spoint { get; private set; }
+        public Point Epoint { get; private set; }
+
+        public Area(Point point1, Point point2)
+        {
+            Spoint = point1;
+            Epoint = point2;
+        }
+
+        public Area offset(int x,int y)
+        {
+            Area area = new Area(new Point(Spoint.X- x, Spoint.Y - y), new Point(Epoint.X - x, Epoint.Y - y));
+            return area;
         }
     }
     

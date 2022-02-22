@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Interface;
 namespace Loadout_tracker
 {
-    class PowerTemplate
+    public class PowerTemplate
     {
-        int Id;
-        byte[] Template;
+        public int Id;
+        public byte[] Template;
 
         public PowerTemplate(PowerTemplateDTO powerTemplatedto)
         {

@@ -36,6 +36,8 @@ namespace WindowsFormsApp1
             this.button3 = new System.Windows.Forms.Button();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -45,7 +47,7 @@ namespace WindowsFormsApp1
             // 
             this.pictureBox1.Location = new System.Drawing.Point(12, 50);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(840, 506);
+            this.pictureBox1.Size = new System.Drawing.Size(509, 331);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -72,16 +74,16 @@ namespace WindowsFormsApp1
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(858, 50);
+            this.pictureBox2.Location = new System.Drawing.Point(548, 50);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(859, 506);
+            this.pictureBox2.Size = new System.Drawing.Size(547, 331);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 3;
             this.pictureBox2.TabStop = false;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(1640, 12);
+            this.button3.Location = new System.Drawing.Point(939, 11);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(77, 21);
             this.button3.TabIndex = 5;
@@ -107,11 +109,32 @@ namespace WindowsFormsApp1
             this.label1.TabIndex = 7;
             this.label1.Text = "label1";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(834, 597);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "label2";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(1022, 10);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(77, 21);
+            this.button4.TabIndex = 9;
+            this.button4.Text = "Analyse";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1755, 733);
+            this.ClientSize = new System.Drawing.Size(1155, 687);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.button3);
@@ -139,6 +162,8 @@ namespace WindowsFormsApp1
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button4;
     }
 }
 
