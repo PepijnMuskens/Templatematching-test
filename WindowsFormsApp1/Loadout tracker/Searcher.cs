@@ -40,12 +40,22 @@ namespace Loadout_tracker
 
         public Game GetLoadouts(Image<Bgr, byte> image)
         {
+            Image<Bgr, byte> resized = image;
             Game game = new Game();
             //loop true all the scales
-            for (double i = 0.7; i < 1.01; i = i + 0.05)
+            double Scale = 1;
+            for (double i = 0.7; i < 1.5; i = i + 0.05)
             {
-                break;
+                double score = 0;
+                double bestscore = score;
+                resized = image.Resize((int)(image.Width * i), (int)(image.Height * i), Inter.Linear);
+                score = findImage(resized, new Image<Bgr, byte>(Resources.scale_template), new Area(new Point(0,0),new Point(resized.Width,resized.Height/3)));
+                if(score > bestscore)
+                {
+                    Scale = i;
+                }
             }
+            image = image.Resize((int)(image.Width * Scale), (int)(image.Height * Scale), Inter.Linear);
             Point offset = getoffset(image, new Image<Bgr, byte>(Resources.scale_template));
             if (Score > 0.8)
             {
@@ -70,9 +80,9 @@ namespace Loadout_tracker
             double bottemThreshold = 0.7;
             Image<Gray, float> Matches = image1.MatchTemplate(image2, TemplateMatchingType.CcoeffNormed);
 
-            for (int y = area.Spoint.Y; y < area.Epoint.Y; y++)
+            for (int y = area.Spoint.Y; y < area.Epoint.Y - image2.Height; y++)
             {
-                for (int x = area.Spoint.X; x < area.Epoint.X; x++)
+                for (int x = area.Spoint.X; x < area.Epoint.X - image2.Width; x++)
                 {
                     double temp = Matches.Data[y, x, 0];
                     if(temp > TopThreshold) return temp;
