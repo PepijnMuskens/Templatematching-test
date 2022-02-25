@@ -62,7 +62,7 @@ namespace WindowsFormsApp1
         private Point findImage(Image<Bgr,byte> image1, Image<Bgr, byte> image2)
         {
             double Threshold = (double)trackBar1.Value / 100; //set it to a decimal value between 0 and 1.00, 1.00 meaning that the images must be identical
-
+            image1 = image1.Resize(1.12499, Inter.Linear);
             Image<Gray, float> Matches = image1.MatchTemplate(image2, TemplateMatchingType.CcoeffNormed);
 
             for (int y = 0; y < Matches.Data.GetLength(0); y++)
@@ -124,8 +124,9 @@ namespace WindowsFormsApp1
         private void button4_Click(object sender, EventArgs e)
         {
             Image<Bgr, byte> Image1 = new Image<Bgr, byte>(new Bitmap(pictureBox1.Image));
-
+            label2.Text = "";
             Game game = Searcher.GetLoadouts(Image1);
+            label2.Text = game.ToString();
         }
     }
 }

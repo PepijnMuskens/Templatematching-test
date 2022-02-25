@@ -14,6 +14,11 @@ namespace Loadout_tracker
         {
             SLoadouts = new SLoadout[4];
         }
+
+        public override string ToString()
+        {
+            return $"Killer: {KLoadout}";
+        }
     }
 
     public class KLoadout
@@ -26,6 +31,12 @@ namespace Loadout_tracker
         {
             Perks = new int[4];
             Addons = new int[4];
+        }
+
+        public override string ToString()
+        {
+            string temp = $"Power:{Power} Perks:{Perks[0]} {Perks[1]} {Perks[2]} {Perks[3]}";
+            return temp;
         }
     }
 
@@ -40,5 +51,7 @@ namespace Loadout_tracker
             Perks = new int[4];
             Addons = new int[4];
         }
+
+        
     }
 }
